@@ -1,0 +1,16 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sAllowedRepos
+metadata:
+  name: block-public-ip-services
+spec:
+  match:
+    kinds:
+      - apiGroups: ["ec2.aws.crossplane.io"]
+        kinds: ["Instance"]
+      - apiGroups: ["ecs.alibaba.crossplane.io"]
+        kinds: ["Instance"]
+      - apiGroups: ["cvm.tencentcloud.crossplane.io"]
+        kinds: ["Instance"]
+  parameters:
+    repos:
+      - "PRIVATE-NETWORK-ONLY"

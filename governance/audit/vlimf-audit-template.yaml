@@ -1,0 +1,15 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositionRevision
+metadata:
+  name: vlimf-audit
+spec:
+  compositeTypeRef:
+    apiVersion: vlimf.io/v1alpha1
+    kind: ComputeInstance
+
+  patchSets:
+    - name: audit
+      patches:
+        - toFieldPath: "metadata.annotations[vlimf.startTimestamp]"
+          type: FromCompositeFieldPath
+          fromFieldPath: "metadata.creationTimestamp"
