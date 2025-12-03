@@ -1,0 +1,42 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: computeinstance-aws
+  labels:
+    vlimf.io/provider: aws
+spec:
+  compositeTypeRef:
+    apiVersion: vlimf.io/v1alpha1
+    kind: ComputeInstance
+  patchSets:
+    - name: common
+      patches:
+        - fromFieldPath: "spec.region"
+          toFieldPath: "spec.forProvider.region"
+        - fromFieldPath: "spec.instanceType"
+          toFieldPath: "spec.forProvider.instanceType"
+        - fromFieldPath: "spec.diskSize"
+          toFieldPath: "spec.forProvider.blockDeviceMappings[0].ebs.volumeSize"
+
+  resources:
+    - name: ec2instance
+      base:
+        apiVersion: ec2.aws.crossplane.io/v1beta1
+        kind: Instance
+        spec:
+          forProvider:
+            region: us-east-1
+            instanceType: t2.micro
+            ami: "ami-0c94855ba95c71c99" # default Ubuntu
+            blockDeviceMappings:
+              - deviceName: /dev/sda1
+                ebs:
+                  deleteOnTermination: true
+                  volumeSize: 20
+          providerConfigRef:
+            name: aws-provider
+      patches:
+        - type: PatchSet
+          patchSetName: common
+        - fromFieldPath: "spec.osImage"
+          toFieldPath: "spec.forProvider.ami"
