@@ -1,0 +1,62 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: computeinstances.vlimf.io
+spec:
+  group: vlimf.io
+  names:
+    kind: ComputeInstance
+    plural: computeinstances
+  claimNames:
+    kind: ComputeInstanceClaim
+    plural: computeinstanceclaims
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required:
+                - provider
+                - region
+                - cpu
+                - memory
+              properties:
+                provider:
+                  type: string
+                  enum:
+                    - aws
+                    - aliyun
+                    - tencent
+                  description: "Target cloud provider"
+                region:
+                  type: string
+                  description: "Region to deploy the instance"
+                cpu:
+                  type: integer
+                  description: "Requested vCPU count"
+                memory:
+                  type: string
+                  description: "Memory size (e.g., 1Gi, 2Gi)"
+                instanceType:
+                  type: string
+                  description: "Optional explicit VM type (t2.micro, ecs.t5-lc2m1, S5.MEDIUM4)"
+                osImage:
+                  type: string
+                  description: "Optional OS image ID"
+                diskSize:
+                  type: integer
+                  description: "Disk size in GB"
+            status:
+              type: object
+              properties:
+                state:
+                  type: string
+                instanceID:
+                  type: string
+                provider:
+                  type: string
