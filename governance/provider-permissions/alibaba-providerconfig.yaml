@@ -1,0 +1,12 @@
+apiVersion: alibaba.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: alibaba-provider
+spec:
+  region: cn-hangzhou
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: alibaba-secret
+      key: credentials

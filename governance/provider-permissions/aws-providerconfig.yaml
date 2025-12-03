@@ -10,4 +10,4 @@ spec:
       name: aws-secret
       key: creds
   assumeRole:
-    arn: arn:aws:iam::<ACCOUNT_ID>:role/vlimf-ec2-limited
+    arn: arn:aws:iam::313058584052:role/vlimf-ec2-limited
